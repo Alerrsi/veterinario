@@ -37,6 +37,24 @@ class Mascota(models.Model):
         db_table = "mascotas"
 
 
+class Veterinario(models.Model):
+    nombre = models.CharField("nombre", max_length=65)
+    especialidad = models.CharField("especialidad", max_length=100)
+    horarios = models.CharField("horarios", max_length=100)
+    ESTADOS = [
+        ("Disponible", "disponible"),
+        ("Ocupado", "ocupado"),
+    ]
+    estado = models.CharField("estadio", max_length=11, choices=ESTADOS)
+
+    def __str__(self):
+        return f"{self.nombre}"
+    
+    class Meta:
+        db_table = "veterinarios"
+
+
+
 class Consulta(models.Model):
     fecha = models.DateField(auto_now=True)
     motivo = models.TextField("motivo consulta")
@@ -47,31 +65,16 @@ class Consulta(models.Model):
         ("Disponible", "disponible"),
         ("Ocupadp", "ocupado"),
     ]
-    estado = models.CharField("estadio", max_length=11, choices=ESTADOS)
+    estado = models.CharField("estado", max_length=11, choices=ESTADOS)
 
     mascota = models.ForeignKey(Mascota, on_delete=models.CASCADE)
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    veterinario = models.ForeignKey(Veterinario, on_delete=models.CASCADE)
 
     
     class Meta:
         db_table = "consultas"
 
 
-class Veterinario(models.Model):
-    nombre = models.CharField("nombre", max_length=65)
-    especialidad = models.CharField("especialidad", max_length=100)
-    horarios = models.CharField("horarios", max_length=100)
-    ESTADOS = [
-        ("Disponible", "disponible"),
-        ("Ocupadp", "ocupado"),
-    ]
-    estado = models.CharField("estadio", max_length=11, choices=ESTADOS)
-
-    def __str__(self):
-        return f"{self.nombre}"
-    
-    class Meta:
-        db_table = "veterinarios"
 
 
 class Medicamento(models.Model):

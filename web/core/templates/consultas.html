@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de Consultas</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lista de Consultas</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Motivo</th>
+                <th>Diagnóstico</th>
+                <th>Tratamiento</th>
+                <th>Estado</th>
+                <th>Mascota</th>
+                <th>Cliente</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            {% for consulta in consultas %}
+                <td>{{consulta.fecha}}</td>
+                <td>{{consulta.motivo}}</td>
+                <td>{{consulta.diagnostico}}</td>
+                <td>{{consulta.tratamiento}}</td>
+                <td>{{consulta.estado}}</td>
+                <td>{{consulta.mascota.nombre}}</td>
+                <td>{{consulta.cliente.nombre}}</td>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
