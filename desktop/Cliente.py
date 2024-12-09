@@ -78,9 +78,14 @@ class AdminCliente():
 
     def addCliente(self):
         nombre = input("Ingrese el nombre: \n")
-        telefono = input("Ingrese la telefono: \n")
+        while True: 
+            telefono = input("Ingrese la telefono: \n")
+            if self.clean_telefono(telefono):
+                break
+            else: 
+                print("numero no valido, debe ser: [9]87654321")
         while True:
-            correo = input("Ingrese el correo")
+            correo = input("Ingrese el correo: \n")
 
             if self.clean_correo(correo):
                 break
@@ -103,21 +108,28 @@ class AdminCliente():
             print("id no valido")
         else:
             nombre = input("Ingrese el nombre: \n")
-            telefono = input("Ingrese la telefono: \n")
+            while True: 
+                telefono = input("Ingrese la telefono: \n")
+                if self.clean_telefono(telefono):
+                    break
+                else: 
+                    print("numero no valido, debe ser: [9]87654321")
             while True:
-                correo = input("Ingrese el correo")
+                correo = input("Ingrese el correo: \n")
 
                 if self.clean_correo(correo):
                     break
+                else: 
+                    print("correo no valido")
 
             direccion = input("Ingrese los direccion: \n")
             while True:
-
                 tipo = input("Ingrese el estado: [premium, regular]")
-
-                if tipo.lower() in ["premium", "regular"] and tipo:
+                if self.clean_tipo(tipo):
                     break
-                else: print("Opcion No valida, Ingrese: [premium, regular]")
+                else: 
+                    print("tipo no valido, debe ser : ['regular', 'premium']")
+                
 
             action = ClienteModify()
 
@@ -140,6 +152,21 @@ class AdminCliente():
                 return False
             else: 
                 return True
+            
+
+    def clean_telefono(self, telefono: str) -> bool:
+
+        if len(telefono) == 9 and telefono[0] == "9" and telefono.isnumeric():
+            return True
+
+        return False
+    
+    def clean_tipo(self, tipo: str) -> bool:
+
+        if tipo.lower() in ["premium", "regular"] and tipo:
+            return True
+        else: 
+            return False
         
 
 

@@ -147,18 +147,14 @@ def opciones():
 
 def algo(opcion: int): 
     if opcion == 1:
-        
         opcionAPIMedicamento()
 
     elif opcion == 2:
-        
         opcionAPICliente()
 
 
 
 def main():
-
-    
     while True:
         menu()
         opcion = opciones()
@@ -172,7 +168,6 @@ def main():
 
 
 main()
-
 
 
 

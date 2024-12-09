@@ -73,7 +73,15 @@ class AdminMedicamento():
         nombre = input("Ingrese el nombre: \n")
         tipo = input("Ingrese el tipo: \n")
         dosis = input("Ingrese la dosis: \n")
-        cantidad = input("Ingrese la cantidad: \n")
+        while True: 
+                try: 
+                    cantidad = int(input("Ingrese la cantidad: \n"))
+                    if self.clean_cantidad(cantidad):
+                        break
+                    else: 
+                        print("la cantidad debe ser mayor a 0")
+                except ValueError as e:
+                    print("Debe ingresar un entero")
         medicamento = Medicamento(nombre= nombre, tipo=tipo,dosis=dosis, cantidad=cantidad)
         medicamento.save()
 
@@ -87,7 +95,16 @@ class AdminMedicamento():
             nombre = input("Ingrese el nombre: \n")
             tipo = input("Ingrese el tipo: \n")
             dosis = input("Ingrese la dosis: \n")
-            cantidad = input("Ingrese la cantidad: \n")
+            while True: 
+                try: 
+                    cantidad = int(input("Ingrese la cantidad: \n"))
+                    if self.clean_cantidad(cantidad):
+                        break
+                    else: 
+                        print("la cantidad debe ser mayor a 0")
+                except ValueError as e:
+                    print("Debe ingresar un entero")
+
             action = MedicamentoModify()
 
             action.update(id, {
@@ -97,6 +114,13 @@ class AdminMedicamento():
                 "cantidad": cantidad,
                 
             })
+
+    def clean_cantidad(self, cantidad: int) -> bool:
+
+        if cantidad > 0:
+            return True
+        
+        return False
         
 
 
