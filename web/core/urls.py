@@ -14,6 +14,7 @@ urlpatterns = [
     path("consultas/table", getConsultas, name = "consultas"),
     path("consultas/nueva", addConsulta, name = "nueva-consultas"),
     path("consultas/actualizar/<int:id>", upConsulta, name = "actualizar-consultas"),
+    path("consultas/eliminar/<int:id>", eliminar_consultas, name = "eliminar-consultas"),
 
     path('consultas/', ConsultaView.as_view(), name='consulta-list-create'),
     path('consultas/<int:pk>/', ConsultaView.as_view(), name='consulta-detail-update'),

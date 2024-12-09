@@ -20,11 +20,23 @@ from .forms import ConsultaForm
 
 
 class ClienteView(APIView):
+    def get_object(self, pk):
+        try:
+            return Cliente.objects.get(pk=pk)
+        except Cliente.DoesNotExist:
+            raise Http404 
 
-    def get(self, request, format=None, *args, **kwargs):
-        clientes = Cliente.objects.all()
-        serializer = ClienteSerializer(clientes, many = True)
-        return Response(serializer.data)
+    def get(self, request, pk=None,format=None, *args, **kwargs):
+        if pk: 
+            cliente = self.get_object(pk)
+            serializer = ClienteSerializer(cliente)
+
+            return Response(serializer.data)
+        else: 
+            cliente = Cliente.objects.all()
+            serializer = ClienteSerializer(cliente, many = True)
+
+            return Response(serializer.data)  
 
     def post(self, request):
         serializer = ClienteSend(data = request.data)
@@ -54,12 +66,22 @@ class ClienteView(APIView):
 
 
 class MascotaView(APIView):
+    def get_object(self, pk):
+        try:
+            return Mascota.objects.get(pk=pk)
+        except Mascota.DoesNotExist:
+            raise Http404 
+    def get(self, request, pk=None,format=None, *args, **kwargs):
+        if pk: 
+            mascota = self.get_object(pk)
+            serializer = MascotaSerializer(mascota)
 
-    def get(self, request, format=None, *args, **kwargs):
-        mascotas = Mascota.objects.all()
-        serializer = MascotaSerializer(mascotas, many = True)
+            return Response(serializer.data)
+        else: 
+            mascota = Mascota.objects.all()
+            serializer = MascotaSerializer(mascota, many = True)
 
-        return Response(serializer.data)
+            return Response(serializer.data)
 
     def post(self, request):
         serializer = MascotaSend(data = request.data)
@@ -90,11 +112,23 @@ class MascotaView(APIView):
 
 class ConsultaView(APIView):
 
-    def get(self, request, format=None, *args, **kwargs):
-        clientes = Consulta.objects.all()
-        serializer = ConsultaSerializer(clientes, many = True)
+    def get_object(self, pk):
+        try:
+            return Consulta.objects.get(pk=pk)
+        except Consulta.DoesNotExist:
+            raise Http404 
 
-        return Response(serializer.data)
+    def get(self, request, pk=None,format=None, *args, **kwargs):
+        if pk: 
+            consulta = self.get_object(pk)
+            serializer = ConsultaSerializer(consulta)
+
+            return Response(serializer.data)
+        else: 
+            consulta = Consulta.objects.all()
+            serializer = ConsultaSerializer(consulta, many = True)
+
+            return Response(serializer.data)
 
     def post(self, request):
         serializer = ConsultaSend(data = request.data)
@@ -132,6 +166,7 @@ def addConsulta(request):
         form = ConsultaForm(request.POST)
         if form.is_valid():
             form.save()
+            return redirect('consultas')
 
     else: 
         form = ConsultaForm()
@@ -145,13 +180,17 @@ def upConsulta(request, id):
         form = ConsultaForm(request.POST, instance=consulta)
         if form.is_valid():
             form.save()
+            return redirect('consultas')
 
     else: 
         form = ConsultaForm(instance=consulta)
 
     return render(request, "form_consulta.html", {"form": form})
 
-
+def eliminar_consultas(request, id):
+    consulta = get_object_or_404(Consulta, id=id)  
+    consulta.delete()  
+    return redirect('consultas')
 
 
 
@@ -203,11 +242,23 @@ class VeterinarioView(APIView):
 
 class MedicamentoView(APIView):
 
-    def get(self, request, format=None, *args, **kwargs):
-        clientes = Medicamento.objects.all()
-        serializer = MedicamentoSerializer(clientes, many = True)
+    def get_object(self, pk):
+        try:
+            return Medicamento.objects.get(pk=pk)
+        except Medicamento.DoesNotExist:
+            raise Http404 
 
-        return Response(serializer.data)    
+    def get(self, request, pk=None,format=None, *args, **kwargs):
+        if pk: 
+            medicamento = self.get_object(pk)
+            serializer = MedicamentoSerializer(medicamento)
+
+            return Response(serializer.data)
+        else: 
+            medicamento = Medicamento.objects.all()
+            serializer = MedicamentoSerializer(medicamento, many = True)
+
+            return Response(serializer.data)  
 
     def post(self, request):
         serializer = MedicamentoSend(data = request.data)

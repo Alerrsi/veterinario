@@ -56,14 +56,14 @@ class Veterinario(models.Model):
 
 
 class Consulta(models.Model):
-    fecha = models.DateField(auto_now=True)
+    fecha = models.DateField()
     motivo = models.TextField("motivo consulta")
     diagnostico = models.CharField("diagnostico", max_length=100)
     tratamiento = models.CharField("tratamiento", max_length=200)
 
     ESTADOS = [
-        ("Disponible", "disponible"),
-        ("Ocupadp", "ocupado"),
+        ("Finalizada", "finalizada"),
+        ("Realizada", "realizada"),
     ]
     estado = models.CharField("estado", max_length=11, choices=ESTADOS)
 
