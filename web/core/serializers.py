@@ -5,7 +5,7 @@ from .models import *
 class ClienteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cliente
-        fields = ["nombre", "telefono", "correo", "direccion"]
+        fields = ["id", "nombre", "telefono", "correo", "direccion", "tipo"]
 
 
 
@@ -63,7 +63,7 @@ class VeterinarioSend(serializers.ModelSerializer):
 class MedicamentoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Medicamento
-        fields = ["nombre", "tipo", "dosis", "cantidad"]
+        fields = ["id","nombre", "tipo", "dosis", "cantidad"]
 
 
 
