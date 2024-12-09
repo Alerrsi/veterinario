@@ -164,11 +164,17 @@ class VeterinarioView(APIView):
             raise Http404 
         
 
-    def get(self, request, format=None, *args, **kwargs):
-        veterinario = Veterinario.objects.all()
-        serializer = VetrinarioSerializer(veterinario, many = True)
+    def get(self, request, pk=None,format=None, *args, **kwargs):
+        if pk: 
+            veterinario = self.get_object(pk)
+            serializer = VetrinarioSerializer(veterinario)
 
-        return Response(serializer.data)
+            return Response(serializer.data)
+        else: 
+            veterinario = Veterinario.objects.all()
+            serializer = VetrinarioSerializer(veterinario, many = True)
+
+            return Response(serializer.data)
     
     def post(self, request):
         serializer = VeterinarioSend(data = request.data)
