@@ -12,7 +12,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from .models import *
 from django.http import Http404
-from .forms import ConsultaForm
+from .forms import *
 
 
 
@@ -193,7 +193,67 @@ def eliminar_consultas(request, id):
     consulta.delete()  
     return redirect('consultas')
 
+def getMascota(request):
+    mascotas = Mascota.objects.all()
+    return render(request,"mascotas.html", {"mascotas": mascotas})
 
+def addMascota(request):
+    if request.method == "POST":
+        form = MascotaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("mascotas")
+    else:
+        form = MascotaForm()
+    return render(request, "form_mascotas.html", {"form" : form})
+
+def upMascota(request, id):
+    mascota = get_object_or_404(Mascota, pk=id)
+    if request.method == "POST":
+        form = MascotaForm(request.POST, instance=mascota)
+        if form.is_valid():
+            form.save()
+            return redirect('mascotas')
+
+    else: 
+        form = MascotaForm(instance=mascota)
+
+    return render(request, "form_mascotas.html", {"form": form})
+
+def eliminar_mascota(request, id):
+    mascota = get_object_or_404(Mascota, id=id)
+    mascota.delete()
+    return redirect('mascotas')
+
+def getVeterinario(request):
+    veterinarios = Veterinario.objects.all()
+    return render(request, "veterinario.html" , {"veterinarios" : veterinarios})
+
+def addVeterinario(request):
+    if request.method == "POST":
+        form = VeterinarioForm(request.POST)
+        if form.is_valid():
+            form.save
+            return redirect("veterinarios")
+    else:
+        form = VeterinarioForm()
+    return render(request, "form_veterinario.html" , {"form": form})
+    
+def upVeterinario(request,id):
+    veterinario = get_object_or_404(Veterinario, pk=id)
+    if request.method == "POST":
+        form = VeterinarioForm(request.POST, instance=veterinario)
+        if form.is_valid():
+            form.save()
+            return redirect('veterinarios')
+    else:
+        form = VeterinarioForm(instance=veterinario)
+    return render(request, "form_veterinario.html", {"form": form})
+        
+def eliminar_Veterinario(request,id):
+    veterinario = get_object_or_404(Veterinario, id=id)
+    veterinario.delete()
+    return redirect("veterinarios")
 
 class VeterinarioView(APIView):
 

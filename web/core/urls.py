@@ -10,6 +10,11 @@ urlpatterns = [
     path('mascotas/', MascotaView.as_view(), name='mascota-list-create'),
     path('mascotas/<int:pk>/', MascotaView.as_view(), name='mascota-detail-update'),
 
+    path("mascota/tabla", getMascota, name="mascotas"),
+    path("mascota/nuevo", addMascota, name="nueva-mascota"),
+    path("mascota/actualizar/<int:id>", upMascota, name="actualizar-mascota"),
+    path("mascota/eliminar/<int:id>", eliminar_mascota, name="eliminar-mascota"),
+
     # ConsultaView URLs
     path("consultas/table", getConsultas, name = "consultas"),
     path("consultas/nueva", addConsulta, name = "nueva-consultas"),
@@ -23,7 +28,13 @@ urlpatterns = [
     path('veterinarios/', VeterinarioView.as_view(), name='veterinario-list-create'),
     path('veterinarios/<int:pk>/', VeterinarioView.as_view(), name='veterinario-detail-update'),
 
+    path("veterinario/tabla", getVeterinario, name="veterinarios"),
+    path("veterinario/nuevo", addVeterinario, name="nuevo-veterinario"),
+    path("veterinario/actualizar/<int:id>", upVeterinario, name="actualizar-veterinario"),
+    path("veterinario/eliminar/<int:id>", eliminar_Veterinario, name="eliminar-veterinario"),
+
     # MedicamentoView URLs
     path('medicamentos/', MedicamentoView.as_view(), name='medicamento-list-create'),
     path('medicamentos/<int:pk>/', MedicamentoView.as_view(), name='medicamento-detail-update'),
+
 ]
