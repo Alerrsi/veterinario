@@ -7,6 +7,7 @@ urlpatterns = [
     path("inicio/", inicio, name="inicio"),
     path("logout/", logout_view, name="logout"),
     path("tjson/", json_todo, name="json"),
+    path("csv/", csv_exportacion, name="csv"),
     # ClienteView URLs
     path('clientes/', ClienteView.as_view(), name='cliente-list-create'),
     path('clientes/<int:pk>/', ClienteView.as_view(), name='cliente-detail-update'),

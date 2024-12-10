@@ -13,9 +13,49 @@ from rest_framework.views import APIView
 from .models import *
 from django.http import Http404
 from .forms import *
+import csv
+from django.http import HttpResponse
 
+@login_required
+def csv_exportacion(request):
 
+    if "tabla" not in request.GET:
+        return render(request, "exportar_csv.html") #evitar que me tire error debido a que no hay una tabla seleccionada
 
+    table = request.GET.get("tabla") #se le asigna el valor obtenido del HTML (la tabla que va a sufrir el filtro)
+    name_filter = request.GET.get("name", "") #el valor por el que filtrar
+
+    data = [] #dnde se va a almacenar los valores obtenidos
+    if table == "clientes": #revisar que tabla y obtener los valores que cumplen con el filtro
+        queryset = Cliente.objects.filter(nombre__icontains=name_filter)
+        data = queryset.values("id", "nombre", "telefono", "correo", "direccion", "tipo")
+    elif table == "mascotas":
+        queryset = Mascota.objects.filter(nombre__icontains=name_filter)
+        data = queryset.values("id", "nombre", "especie", "raza", "edad", "peso")
+    elif table == "veterinarios":
+        queryset = Veterinario.objects.filter(nombre__icontains=name_filter)
+        data = queryset.values("id", "nombre", "especialidad", "horarios", "estado")
+    elif table == "consultas":
+        queryset = Consulta.objects.filter(
+            mascota__nombre__icontains=name_filter #llaveforanea__campoforaneo__sicontiene=filtro 
+        ) | Consulta.objects.filter(veterinario__nombre__icontains=name_filter)
+        data = queryset.values(
+            "id", "fecha", "motivo", "diagnostico", "tratamiento", "estado", "mascota", "veterinario"
+        ) #Medicamentos no tiene un name field
+    elif table == "medicamentos":
+        queryset = Medicamento.objects.filter(nombre__icontains=name_filter)
+        data = queryset.values("id", "nombre", "tipo", "dosis", "cantidad")
+
+    response = HttpResponse(content_type="text/csv") #crear el tipo de archivo que va a recibir el Usuario
+    response["Content-Disposition"] = f'attachment; filename="{table}.csv"' #asignar un buen nombre al archivo
+    writer = csv.writer(response) 
+
+    if data:
+        writer.writerow(data[0].keys())
+    for row in data:
+        writer.writerow(row.values()) #escribir CSV
+
+    return response #retornar el archivo
 
 
 
@@ -260,7 +300,7 @@ def addVeterinario(request):
     if request.method == "POST":
         form = VeterinarioForm(request.POST)
         if form.is_valid():
-            form.save
+            form.save()
             return redirect("veterinarios")
     else:
         form = VeterinarioForm()
@@ -335,17 +375,17 @@ def json_todo(request):
     Consultas = Consulta.objects.all()
     Mascotas = Mascota.objects.all()
     Medicamentos = Medicamento.objects.all()
-    Veterinarios = Veterinario.objects.all()
+    Veterinarios = Veterinario.objects.all() #obtener absolutamente todos los datos posibles y por haber
 
     serializador_clientes = ClienteSerializer(clientes, many = True)
     serializador_Consultas = ConsultaSerializer(Consultas, many = True)
     serializador_Mascotas = MascotaSerializer(Mascotas, many = True)
     serializador_Medicamentos = MedicamentoSerializer(Medicamentos, many = True)
-    serializador_Veterinarios = VetrinarioSerializer(Veterinarios, many = True)
+    serializador_Veterinarios = VetrinarioSerializer(Veterinarios, many = True) #Utilizar los serializaer para asegurarse de que esto salga bien
 
     data = {'clientes' : serializador_clientes.data, 'consultas' : serializador_Consultas.data, "mascotas": serializador_Mascotas.data, 'medicamentos' : serializador_Medicamentos.data,
-            "veterinarios" : serializador_Veterinarios.data} 
-    return Response(data)
+            "veterinarios" : serializador_Veterinarios.data} #la organizacion del JSON y como se ven a ver 
+    return Response(data) #retornar la data en formato JSON
 
 class MedicamentoView(APIView):
 

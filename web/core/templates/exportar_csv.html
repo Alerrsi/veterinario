@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Exportacion{% endblock %}
+
+{% block content %}
+<div class="container mt-5 py-4 rounded shadow bg-white">
+    <h1 class="text-center mb-4 text-success">Exportar datos a CSV</h1>
+    <form method="get" action="{% url 'csv' %}" class="needs-validation" novalidate>
+        <div class="form-group">
+            <label for="tabla" class="font-weight-bold">Selecciona la Tabla:</label>
+            <select name="tabla" id="tabla" class="form-control custom-select">
+                <option value="clientes">Clientes</option>
+                <option value="mascotas">Mascotas</option>
+                <option value="veterinarios">Veterinarios</option>
+                <option value="consultas">Consultas</option>
+                <option value="medicamentos">Medicamentos</option>
+            </select>
+        </div>
+
+        <div class="form-group mt-3">
+            <label for="name" class="font-weight-bold">Filtrar por nombre:</label>
+            <input type="text" id="name" name="name" class="form-control" placeholder="Ingrese el nombre">
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success btn-lg">Exportar</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

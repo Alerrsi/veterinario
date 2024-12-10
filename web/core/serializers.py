@@ -19,7 +19,7 @@ class ClienteSend(serializers.ModelSerializer):
 class MascotaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mascota
-        fields = ["nombre", "especie", "raza", "edad"]
+        fields = ["nombre", "especie", "raza", "edad","peso"]
 
 
 
