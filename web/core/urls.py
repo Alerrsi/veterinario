@@ -2,6 +2,11 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
+
+    path("", user_login, name="login"),
+    path("inicio/", inicio, name="inicio"),
+    path("logout/", logout_view, name="logout"),
+    path("tjson/", json_todo, name="json"),
     # ClienteView URLs
     path('clientes/', ClienteView.as_view(), name='cliente-list-create'),
     path('clientes/<int:pk>/', ClienteView.as_view(), name='cliente-detail-update'),

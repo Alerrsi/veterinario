@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 
 from rest_framework import serializers
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login as auth_login, logout
 from django.contrib.auth.decorators import login_required
 from .serializers import *
 from rest_framework.decorators import api_view
@@ -109,7 +109,26 @@ class MascotaView(APIView):
 
 
 
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)  # Fixed
+        if user is not None:
+            auth_login(request, user)  # Using imported `login` to avoid name conflict
+            return redirect('inicio')
+        else:
+            return render(request, 'login.html', {'error': 'Credenciales inválidas'})
+    else:
+        return render(request, 'login.html')
 
+def logout_view(request):
+    logout(request)
+    return redirect('login')
+
+@login_required
+def inicio(request):
+    return render(request, "inicio.html")
 
 class ConsultaView(APIView):
 
@@ -157,11 +176,12 @@ class ConsultaView(APIView):
         consulta.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
+@login_required
 def getConsultas(request):
     consultas = Consulta.objects.all()
     return render(request, "consultas.html", {"consultas": consultas})
 
+@login_required
 def addConsulta(request):
     if request.method == "POST":
         form = ConsultaForm(request.POST)
@@ -174,7 +194,7 @@ def addConsulta(request):
 
     return render(request, "form_consulta.html", {"form": form})
 
-
+@login_required
 def upConsulta(request, id):
     consulta = get_object_or_404(Consulta, pk=id)
     if request.method == "POST":
@@ -188,15 +208,18 @@ def upConsulta(request, id):
 
     return render(request, "form_consulta.html", {"form": form})
 
+@login_required
 def eliminar_consultas(request, id):
     consulta = get_object_or_404(Consulta, id=id)  
     consulta.delete()  
     return redirect('consultas')
 
+@login_required
 def getMascota(request):
     mascotas = Mascota.objects.all()
     return render(request,"mascotas.html", {"mascotas": mascotas})
 
+@login_required
 def addMascota(request):
     if request.method == "POST":
         form = MascotaForm(request.POST)
@@ -207,6 +230,7 @@ def addMascota(request):
         form = MascotaForm()
     return render(request, "form_mascotas.html", {"form" : form})
 
+@login_required
 def upMascota(request, id):
     mascota = get_object_or_404(Mascota, pk=id)
     if request.method == "POST":
@@ -220,15 +244,18 @@ def upMascota(request, id):
 
     return render(request, "form_mascotas.html", {"form": form})
 
+@login_required
 def eliminar_mascota(request, id):
     mascota = get_object_or_404(Mascota, id=id)
     mascota.delete()
     return redirect('mascotas')
 
+@login_required
 def getVeterinario(request):
     veterinarios = Veterinario.objects.all()
     return render(request, "veterinario.html" , {"veterinarios" : veterinarios})
 
+@login_required
 def addVeterinario(request):
     if request.method == "POST":
         form = VeterinarioForm(request.POST)
@@ -238,7 +265,8 @@ def addVeterinario(request):
     else:
         form = VeterinarioForm()
     return render(request, "form_veterinario.html" , {"form": form})
-    
+
+@login_required    
 def upVeterinario(request,id):
     veterinario = get_object_or_404(Veterinario, pk=id)
     if request.method == "POST":
@@ -249,7 +277,8 @@ def upVeterinario(request,id):
     else:
         form = VeterinarioForm(instance=veterinario)
     return render(request, "form_veterinario.html", {"form": form})
-        
+
+@login_required        
 def eliminar_Veterinario(request,id):
     veterinario = get_object_or_404(Veterinario, id=id)
     veterinario.delete()
@@ -299,7 +328,24 @@ class VeterinarioView(APIView):
         veterinario.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+@api_view(['GET'])
+@login_required
+def json_todo(request):
+    clientes = Cliente.objects.all()
+    Consultas = Consulta.objects.all()
+    Mascotas = Mascota.objects.all()
+    Medicamentos = Medicamento.objects.all()
+    Veterinarios = Veterinario.objects.all()
 
+    serializador_clientes = ClienteSerializer(clientes, many = True)
+    serializador_Consultas = ConsultaSerializer(Consultas, many = True)
+    serializador_Mascotas = MascotaSerializer(Mascotas, many = True)
+    serializador_Medicamentos = MedicamentoSerializer(Medicamentos, many = True)
+    serializador_Veterinarios = VetrinarioSerializer(Veterinarios, many = True)
+
+    data = {'clientes' : serializador_clientes.data, 'consultas' : serializador_Consultas.data, "mascotas": serializador_Mascotas.data, 'medicamentos' : serializador_Medicamentos.data,
+            "veterinarios" : serializador_Veterinarios.data} 
+    return Response(data)
 
 class MedicamentoView(APIView):
 

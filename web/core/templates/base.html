@@ -24,10 +24,27 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="{% url 'consultas' %}">Página Principal</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'json' %}">JSON</a>
+                    </li>
+                    <a class="nav-link text-white" href="{% url 'inicio' %}">Página Principal</a>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'mascotas' %}">Mascotas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'consultas' %}">Consultas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'veterinarios' %}">Veterinarios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'logout' %}">Salir</a>
+                    </li>
+
             </ul>
+
         </div>
+
     </div>
 </nav>
 

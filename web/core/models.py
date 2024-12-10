@@ -63,9 +63,9 @@ class Consulta(models.Model):
 
     ESTADOS = [
         ("Finalizada", "finalizada"),
-        ("Realizada", "realizada"),
+        ("Por Realizar", "por realizar"),
     ]
-    estado = models.CharField("estado", max_length=11, choices=ESTADOS)
+    estado = models.CharField("estado", max_length=20, choices=ESTADOS)
 
     mascota = models.ForeignKey(Mascota, on_delete=models.CASCADE)
     veterinario = models.ForeignKey(Veterinario, on_delete=models.CASCADE)
