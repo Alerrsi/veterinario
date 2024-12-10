@@ -5,6 +5,12 @@
 {% block content %}
 <div class="container mt-5">
     <h1 class="text-center mb-4">Lista de Veterinarios</h1>
+    <form method="get" action="" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Buscar por nombre..." value="{{ request.GET.search }}">
+            <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+        </div>
+    </form>
     <div class="mb-3 text-end">
         <a class="btn btn-primary btn-lg" href="{% url 'nuevo-veterinario' %}">Agregar Veterinario</a>
     </div>

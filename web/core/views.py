@@ -15,6 +15,7 @@ from django.http import Http404
 from .forms import *
 import csv
 from django.http import HttpResponse
+from django.db.models import Q
 
 @login_required
 def csv_exportacion(request):
@@ -218,8 +219,18 @@ class ConsultaView(APIView):
 
 @login_required
 def getConsultas(request):
-    consultas = Consulta.objects.all()
-    return render(request, "consultas.html", {"consultas": consultas})
+    busqueda = request.GET.get('search', '')
+    if busqueda:
+        consultas = Consulta.objects.filter(
+            Q(mascota__nombre__icontains=busqueda) | Q(veterinario__nombre__icontains=busqueda)
+        )
+    else:
+        consultas = Consulta.objects.all()
+    
+    context = {
+        'consultas': consultas
+    }
+    return render(request, 'consultas.html', context)
 
 @login_required
 def addConsulta(request):
@@ -256,8 +267,17 @@ def eliminar_consultas(request, id):
 
 @login_required
 def getMascota(request):
-    mascotas = Mascota.objects.all()
-    return render(request,"mascotas.html", {"mascotas": mascotas})
+    busqueda = request.GET.get('search', '')
+    if busqueda:
+        mascotas = Mascota.objects.filter(
+            Q(nombre__icontains=busqueda)
+        )
+    else:
+        mascotas = Mascota.objects.all()
+    context = {
+        'mascotas': mascotas
+    }
+    return render(request, 'mascotas.html', context)
 
 @login_required
 def addMascota(request):
@@ -292,8 +312,17 @@ def eliminar_mascota(request, id):
 
 @login_required
 def getVeterinario(request):
-    veterinarios = Veterinario.objects.all()
-    return render(request, "veterinario.html" , {"veterinarios" : veterinarios})
+    busqueda = request.GET.get('search', '')
+    if busqueda:
+        veterinario = Veterinario.objects.filter(
+            Q(nombre__icontains=busqueda)
+        )
+    else:
+        veterinario = Veterinario.objects.all()
+    context = {
+        'veterinarios': veterinario
+    }
+    return render(request, 'veterinario.html', context)
 
 @login_required
 def addVeterinario(request):
