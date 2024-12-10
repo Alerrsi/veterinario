@@ -34,6 +34,7 @@ def menu() :
     print("___Menu de Opciones___")
     print("1) Menu de Medicamentos")
     print("2) Menu de Clientes")
+    print("3) Salir")
 
 def menuOpcion(tipo: str):
     print(f"__MENU {tipo}__")
@@ -132,7 +133,7 @@ def opciones():
     while True:
         try: 
             opcion = int(input("Ingrese la opcion: "))
-            if opcion in [1, 2]:
+            if opcion in [1, 2, 3]:
                 cleanDisplay()
                 break
             else: 
@@ -140,7 +141,7 @@ def opciones():
                 print("opcion no valida")
             
         except ValueError as e:
-            print("debe ingresar un numero: [1, 2]")
+            print("debe ingresar un numero: [1, 2, 3]")
 
     return opcion
 
@@ -159,6 +160,9 @@ def main():
         menu()
         opcion = opciones()
         algo(opcion)
+
+        if opcion == 3:
+            break
         
 
 

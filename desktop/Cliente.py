@@ -69,7 +69,10 @@ class ClienteModify():
         URL = f"http://127.0.0.1:8000/clientes/{id}/"
         response = rq.put(URL, datos)
 
-        print(response.status_code)
+        if response.status_code == 200:
+            print("Cliente Modificado ")
+        else: 
+            print("Error")
         
 
 

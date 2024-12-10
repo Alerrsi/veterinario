@@ -62,8 +62,10 @@ class MedicamentoModify():
         URL = f"http://127.0.0.1:8000/medicamentos/{id}/"
         response = rq.put(URL, datos)
 
-        print(response.status_code)
-        print(URL)
+        if response.status_code == 200:
+            print("Medicamento Actualizado")
+        else: 
+            print("Error")
 
 
 
@@ -114,6 +116,8 @@ class AdminMedicamento():
                 "cantidad": cantidad,
                 
             })
+
+
 
     def clean_cantidad(self, cantidad: int) -> bool:
 
