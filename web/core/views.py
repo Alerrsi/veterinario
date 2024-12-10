@@ -319,6 +319,7 @@ def getVeterinario(request):
         )
     else:
         veterinario = Veterinario.objects.all()
+        
     context = {
         'veterinarios': veterinario
     }
